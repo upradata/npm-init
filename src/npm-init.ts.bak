@@ -1,0 +1,57 @@
+
+
+
+// https://github.com/npm/init-package-json
+// if you want a full prompt program asking if you want the default option, ...
+
+// default init => https://github.com/npm/init-package-json/blob/latest/default-input.js
+// called by https://github.com/npm/init-package-json/blob/latest/init-package-json.js
+
+// Here I just return a plain object I want to have
+
+import path from 'path';
+import init from 'init-package-json';
+import { PromZard } from 'promzard';
+
+
+PromZard.prototype.load = function () {
+    this.file = this.file || this.backupFile;
+    this.loaded();
+};
+
+PromZard.prototype.loaded = async function () {
+    // this.result = {};
+
+    try {
+        const result$ = await import(this.file).then(m => m.default(this.ctx) || {});
+
+        const result = await Promise.all(Object.entries(result$).map(async ([ k, v ]) => Promise.all([ k, await v ])));
+        this.result = Object.fromEntries(result);
+
+        this.emit('data', this.result);
+
+    } catch (er) {
+        this.emit('error', er);
+    }
+
+
+    // this.walk();
+};
+
+
+// a path to a promzard module.  In the event that this file is
+// not found, one will be provided for you.
+const initFile = path.resolve(__dirname, './conditional.init');
+
+// the dir where we're doin stuff.
+const dir = process.cwd();
+
+// extra stuff that gets put into the PromZard module's context.
+// In npm, this is the resolved config object.  Exposed as 'config'
+// Optional.
+const extraContext = { some: 'extra stuff' };
+
+
+init(dir, initFile, extraContext, (_er, _data) => {
+    console.log('\n\npacjage.json generated!');
+});

@@ -1,0 +1,41 @@
+{
+    "compilerOptions": {
+        "outDir": "lib",
+        "module": "CommonJS",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        // "allowJs": true,
+        "declaration": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "lib": [
+            "ESNext",
+            "DOM"
+        ],
+        "skipLibCheck": true,
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "target": "ESNext",
+        "traceResolution": false,
+        "baseUrl": ".",
+        "paths": {
+            "prompts": [
+                "src/@types/prompts"
+            ],
+            "original-prompts": [
+                "node_modules/@types/prompts"
+            ]
+        },
+        "typeRoots": [
+            "src/@types",
+            "node_modules/@types"
+        ],
+    },
+    "include": [
+        "src"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
+}

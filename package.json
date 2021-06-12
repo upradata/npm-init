@@ -1,0 +1,30 @@
+{
+    "name": "@upradata/npm-init",
+    "version": "Customized and enhanced npm init script",
+    "dependencies": {
+        "fs-extra": "^10.0.0",
+        "glob": "^7.1.7",
+        "init-package-json": "^2.0.3",
+        "npm-package-arg": "^8.1.4",
+        "prompts": "^2.4.1",
+        "promzard": "^0.3.0",
+        "read": "^1.0.7",
+        "semver": "^7.3.5",
+        "validate-npm-package-license": "^3.0.4",
+        "validate-npm-package-name": "^3.0.0"
+    },
+    "devDependencies": {
+        "@schemastore/package": "^0.0.6",
+        "@types/fs-extra": "^9.0.11",
+        "@types/glob": "^7.1.3",
+        "@types/init-package-json": "^1.10.0",
+        "@types/node": "^15.12.2",
+        "@types/npm-package-arg": "^6.1.0",
+        "@types/prompts": "^2.0.13",
+        "@types/read": "^0.0.28",
+        "@types/semver": "^7.3.6",
+        "@types/validate-npm-package-license": "^3.0.0",
+        "@types/validate-npm-package-name": "^3.0.2",
+        "typescript": "^4.3.2"
+    }
+}

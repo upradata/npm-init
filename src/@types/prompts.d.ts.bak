@@ -1,0 +1,49 @@
+import type P from '../../node_modules/@types/prompts/index.d';
+import { PkgJsonKeys } from '../types';
+
+
+type GetType<T extends P.PromptType | P.Falsy> = T extends P.Falsy ? never :
+    T extends 'text' | 'password' | 'invisible' | 'toggle' | 'select' | 'autocomplete' ? string :
+    T extends 'number' ? number :
+    T extends 'date' ? Date :
+    T extends 'confirm' ? boolean :
+    T extends 'multiselect' | 'list' | 'autocompleteMultiselect' ? string[] :
+    never;
+
+
+type EnsureArray<T> = T extends any[] ? T : [ T ];
+type Value<N> = N extends (...args: any[]) => any ? ReturnType<N> : N;
+
+
+type Prop<O extends PromptO> = {
+    [ K in Value<O[ 'name' ]> ]: 'format' extends keyof O ? ReturnType<O[ 'format' ]> : GetType<Value<O[ 'type' ]>>
+};
+
+type Props<A extends Array<PromptO<any, any>>> = {
+    [ K in number ]: Prop<A[ K ]>;
+}[ number ];
+
+
+
+export type PromptO<T extends string | number = string, U = never> = Omit<P.PromptObject<T>, 'format' | 'suggest'> & {
+    format?: P.PrevCaller<T, U>;
+    suggest?: ((input: any, choices: P.Choice[]) => Promise<P.Choice[]>);
+};
+
+
+export type Prompts<Keys extends string | number = string> = <Q extends PromptO<Keys, U> | PromptO<Keys, U>[], U = never>(
+    questions: Q,
+    options?: P.Options
+) => Promise<Props<EnsureArray<Q>>>;
+
+
+
+declare const prompts: Prompts;
+export default prompts;
+
+
+/* <Q extends PromptO<T, U> | PromptO<T, U>[], T extends string = string, U = T>(
+    questions: Q,
+    options?: P.Options
+): Promise<Props<EnsureArray<Q>>>;
+ */
