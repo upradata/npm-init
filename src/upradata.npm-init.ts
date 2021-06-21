@@ -27,7 +27,7 @@ export default async (ctx: InitContext): Promise<PkgJson> => {
         type: 'text',
         name: 'repository',
         message: 'repository name in @upradata organization',
-        initial: `https://github.com/upradata/${name}`
+        initial: `https://github.com/upradata/${name.split('/').slice(-1)[ 0 ]}`
     }, {
         validate: value => !!validatePackageName(value).error?.message || true,
         format: name => ({ url: `https://github.com/upradata/${name}` })
@@ -54,7 +54,7 @@ export default async (ctx: InitContext): Promise<PkgJson> => {
         name: 'keywords',
         message: 'keywords'
     }, {
-        format: keywords => [ ...basicKeywords, ...keywords ]
+        format: keywords => [ ...basicKeywords, ...keywords ].filter(v => !!v)
     });
 
 
@@ -89,14 +89,14 @@ export default async (ctx: InitContext): Promise<PkgJson> => {
         ],
         scripts: {
             clean: 'shx rm -rf lib lib-esm',
-            'build:watch': 'npm run clean && tsc -w',
             'pre:build': 'npm run clean',
-            build: 'concurrently \'tsc -p tsconfig.lib.json\' \'tsc -p tsconfig.lib-esm.json\'',
+            build: `concurrently 'tsc -p tsconfig.lib.json' 'tsc -p tsconfig.lib-esm.json'`,
             'post:build': 'npm run test && npm run e2e',
-            watch: 'concurrently \'tsc -p tsconfig.lib.json -w\' \'tsc -p tsconfig.lib-esm.json -w\'',
+            watch: 'pnpm run build:watch',
+            'build:watch': `concurrently 'tsc -p tsconfig.lib.json -w' 'tsc -p tsconfig.lib-esm.json -w'`,
             test: 'npx jest --verbose false --config jest-ut.config.js',
             e2e: 'npx jest --passWithNoTests --verbose false --config jest-e2e.config.js',
-            'github-push': 'npm run build && npm version patch && git pushall && git pushall-tags',
+            'github-push': 'npm version patch && git pushall && git pushall-tags',
             'npm-publish': 'npm run build && npm publish --access public'
         }
     };

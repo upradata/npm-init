@@ -1,5 +1,6 @@
 import path from 'path';
 import fs from 'fs-extra';
+// import { exec } from 'child_process';
 import semver from 'semver';
 import prompts from 'prompts';
 import { InitContext, PkgJson } from './types';
@@ -19,7 +20,7 @@ const init = async () => {
     });
 
 
-    const pkgJson = (packageFile ? require(packageFile) : {}) as PkgJson;
+    const pkgJson = (await fs.pathExists(packageFile) ? require(packageFile) : {}) as PkgJson;
 
     const d = {};
 
