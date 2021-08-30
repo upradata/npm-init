@@ -2,3 +2,4 @@ lib
 lib-esm
 node_modules
 TEST
+bin

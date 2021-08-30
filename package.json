@@ -1,11 +1,29 @@
 {
-    "name": "@upradata/npm-init",
+    "name": "@upradata/npx-init",
+    "author": {
+        "name": "Thomas Milotti",
+        "email": "thomas.milotti@gmail.com",
+        "url": "https://github.com/milottit"
+    },
+    "repository": {
+        "url": "https://github.com/upradata/npx-init"
+    },
+    "license": "MIT",
     "version": "2.0.0",
     "description": "Customized and enhanced npm init script",
+    "sideEffects": false,
+    "main": "lib",
+    "types": "lib-esm",
+    "module": "lib-esm",
+    "files": [
+        "lib",
+        "lib-esm"
+    ],
+    "bin": "bin/npx-init",
     "scripts": {
         "clean": "shx rm -rf lib lib-esm",
         "pre-build": "pnpm run clean",
-        "build": "tsc -p tsconfig.json",
+        "build": "tsc -p tsconfig.json && make-bin",
         "post-build": "pnpm run test && npm run e2e",
         "watch": "pnpm run build:watch",
         "build:watch": "tsc -p tsconfig.json -w",

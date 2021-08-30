@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+mkdir -p bin
+
+PROGRAM="lib/init.js"
+
+echo "copy $PROGRAM to bin"
+
+ln -sf $(realpath $PROGRAM) bin/npx-init
+chmod +x $PROGRAM
+
+chmod +x -R bin
