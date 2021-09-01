@@ -1,4 +1,5 @@
 import validateName from 'validate-npm-package-name';
+import { ExtendedPerson, PlainPerson } from './pkg-json';
 import { makePrompts } from './prompts';
 import { PkgJsonKeys } from './types';
 
@@ -22,17 +23,6 @@ export const validatePackageName = (name: string) => {
     return { error };
 };
 
-
-export interface Person {
-    name?: string;
-    url?: string;
-    email?: string;
-}
-
-export interface ExtendedPerson extends Person {
-    web?: string;
-    mail?: string;
-}
 
 
 // flatten => "Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)"
@@ -60,7 +50,8 @@ const personRx = {
     name: /^([^<(].*?)\s*[<(]/
 };
 
-export const unflattenPerson = (person: string | ExtendedPerson): Person => {
+
+export const unflattenPerson = (person: string | ExtendedPerson): PlainPerson => {
     if (typeof person !== 'string')
         return person;
 

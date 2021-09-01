@@ -5,7 +5,8 @@ PROGRAM="lib/init.js"
 
 echo "copy $PROGRAM to bin"
 
-ln -sf $(realpath $PROGRAM) bin/npx-init
-chmod +x $PROGRAM
+# ln -sf $(realpath $INDEX) bin/npx-local
+(cd bin && ln -sf ../$PROGRAM npx-init)
 
+chmod +x $PROGRAM
 chmod +x -R bin

@@ -19,11 +19,23 @@ export type JSONSchemaForNPMPackageJsonFiles = CoreProperties &
 /**
  * A person who has been involved in creating or maintaining this package
  */
-export type Person =
-    | {
-        [ k: string ]: any;
-    }
-    | string;
+
+export interface PlainPerson {
+    name?: string;
+    url?: string;
+    email?: string;
+}
+
+
+export interface ExtendedPerson extends PlainPerson {
+    web?: string;
+    mail?: string;
+}
+
+
+
+export type Person = ExtendedPerson | string;
+
 /**
  * Run AFTER the package is published
  */

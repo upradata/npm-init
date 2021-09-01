@@ -5,7 +5,7 @@ specifiers:
   '@types/fs-extra': ^9.0.12
   '@types/glob': ^7.1.4
   '@types/init-package-json': ^1.10.0
-  '@types/node': ^16.7.8
+  '@types/node': ^16.7.10
   '@types/npm-package-arg': ^6.1.1
   '@types/prompts': ^2.0.14
   '@types/read': ^0.0.29
@@ -41,7 +41,7 @@ devDependencies:
   '@types/fs-extra': 9.0.12
   '@types/glob': 7.1.4
   '@types/init-package-json': 1.10.0
-  '@types/node': 16.7.8
+  '@types/node': 16.7.10
   '@types/npm-package-arg': 6.1.1
   '@types/prompts': 2.0.14
   '@types/read': 0.0.29
@@ -59,14 +59,14 @@ packages:
   /@types/fs-extra/9.0.12:
     resolution: {integrity: sha512-I+bsBr67CurCGnSenZZ7v94gd3tc3+Aj2taxMT4yu4ABLuOgOjeFxX3dokG24ztSRg5tnT00sL8BszO7gSMoIw==}
     dependencies:
-      '@types/node': 16.7.8
+      '@types/node': 16.7.10
     dev: true
 
   /@types/glob/7.1.4:
     resolution: {integrity: sha512-w+LsMxKyYQm347Otw+IfBXOv9UWVjpHpCDdbBMt8Kz/xbvCYNjP+0qPh91Km3iKfSRLBB0P7fAMf0KHrPu+MyA==}
     dependencies:
       '@types/minimatch': 3.0.5
-      '@types/node': 16.7.8
+      '@types/node': 16.7.10
     dev: true
 
   /@types/init-package-json/1.10.0:
@@ -77,8 +77,8 @@ packages:
     resolution: {integrity: sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==}
     dev: true
 
-  /@types/node/16.7.8:
-    resolution: {integrity: sha512-8upnoQU0OPzbIkm+ZMM0zCeFCkw2s3mS0IWdx0+AAaWqm4fkBb0UJp8Edl7FVKRamYbpJC/aVsHpKWBIbiC7Zg==}
+  /@types/node/16.7.10:
+    resolution: {integrity: sha512-S63Dlv4zIPb8x6MMTgDq5WWRJQe56iBEY0O3SOFA9JrRienkOVDXSXBjjJw6HTNQYSE2JI6GMCR6LVbIMHJVvA==}
     dev: true
 
   /@types/npm-package-arg/6.1.1:
@@ -88,7 +88,7 @@ packages:
   /@types/prompts/2.0.14:
     resolution: {integrity: sha512-HZBd99fKxRWpYCErtm2/yxUZv6/PBI9J7N4TNFffl5JbrYMHBwF25DjQGTW3b3jmXq+9P6/8fCIb2ee57BFfYA==}
     dependencies:
-      '@types/node': 16.7.8
+      '@types/node': 16.7.10
     dev: true
 
   /@types/read/0.0.29:

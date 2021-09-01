@@ -9,7 +9,7 @@
         "url": "https://github.com/upradata/npx-init"
     },
     "license": "MIT",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "Customized and enhanced npm init script",
     "sideEffects": false,
     "main": "lib",
@@ -49,7 +49,7 @@
         "@types/fs-extra": "^9.0.12",
         "@types/glob": "^7.1.4",
         "@types/init-package-json": "^1.10.0",
-        "@types/node": "^16.7.8",
+        "@types/node": "^16.7.10",
         "@types/npm-package-arg": "^6.1.1",
         "@types/prompts": "^2.0.14",
         "@types/read": "^0.0.29",
