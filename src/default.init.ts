@@ -6,6 +6,7 @@ import semver from 'semver';
 import { flattenPerson, niceName, pkgPrompts, unflattenPerson, validatePackageName } from './util';
 import { InitContext, PkgJson, PkgJsonKeys } from './types';
 import prompts from './prompts';
+import { JSONSchemaForNPMPackageJsonFiles } from './pkg-json';
 
 
 const isTestPkg = (p: string) => {
@@ -28,18 +29,15 @@ export default async (ctx: InitContext): Promise<PkgJson> => {
                 return;
 
             const pkgJsonFile = path.join(ctx.dirname, 'node_modules', pkg, 'package.json');
-            const content = await fs.readFile(pkgJsonFile, 'utf8');
-            const json = JSON.parse(content);
+            const json: JSONSchemaForNPMPackageJsonFiles & { _requiredBy?: string[]; } = await fs.readJson(pkgJsonFile, { encoding: 'utf8' });
 
             if (!json.version) {
                 console.warn(`Not adding package ${pkg} in package.json: "version field absent in ${pkg}/package.json"`);
                 return;
             }
 
-            if (json._requiredBy) {
-                if (!json._requiredBy.some(req => req === '#USER'))
-                    return;
-            }
+            if (!json._requiredBy?.some(req => req === '#USER'))
+                return;
 
             return {
                 pkg,

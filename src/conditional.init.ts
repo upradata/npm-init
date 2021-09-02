@@ -19,7 +19,7 @@ export default async (ctx: InitContext): Promise<PkgJson> => {
 
     switch (type) {
         case 'npm default': return import('./default.init').then(m => m.default(ctx));
-        case 'upradata': return import('./upradata.npm-init').then(async m => m.default(ctx));
+        case 'upradata': return import('./upradata.init').then(async m => m.default(ctx));
         default: throw new Error(`Init type not defined`);
     }
 };

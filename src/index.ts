@@ -5,5 +5,5 @@ export * from './pkg-json';
 export * from './prompts';
 export * from './prompts.type';
 export * from './types';
-export * from './upradata.npm-init';
+export * from './upradata.init';
 export * from './util';

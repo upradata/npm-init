@@ -96,6 +96,7 @@ export default async (ctx: InitContext): Promise<PkgJson> => {
             'build:watch': `concurrently 'tsc -p tsconfig.lib.json -w' 'tsc -p tsconfig.lib-esm.json -w'`,
             test: 'npx jest --verbose false --config jest-ut.config.js',
             e2e: 'npx jest --passWithNoTests --verbose false --config jest-e2e.config.js',
+            version: 'npm version',
             'github-push': 'npm version patch && git pushall && git pushall-tags',
             'npm-publish': 'npm run build && npm publish --access public'
         }
