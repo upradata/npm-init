@@ -9,7 +9,7 @@
         "url": "https://github.com/upradata/npx-init"
     },
     "license": "MIT",
-    "version": "2.0.3",
+    "version": "3.0.1",
     "description": "Customized and enhanced npm init script",
     "sideEffects": false,
     "main": "lib",
@@ -22,19 +22,21 @@
     "bin": "bin/npx-init",
     "scripts": {
         "clean": "shx rm -rf lib",
-        "pre-build": "pnpm run clean",
+        "pre-build": "npm run clean",
         "build": "tsc -p tsconfig.json && ./make-bin",
-        "post-build": "pnpm run test && npm run e2e",
-        "watch": "pnpm run build:watch",
+        "post-build": "npm run test && npm run e2e",
+        "watch": "npm run build:watch",
         "build:watch": "tsc -p tsconfig.json -w",
-        "test": "pnpm jest --passWithNoTests --verbose false --config jest-ut.config.js",
-        "e2e": "pnpm jest --passWithNoTests --verbose false --config jest-e2e.config.js",
-        "github-push": "pnpm run build && npm version patch && git pushall && git pushall-tags",
-        "npm-publish": "pnpm run build && npm publish --access public"
+        "test": "jest --runInBand --passWithNoTests --verbose false --config jest-ut.config.js",
+        "e2e": "jest --runInBand --passWithNoTests --verbose false --config jest-e2e.config.js",
+        "version": "npm version",
+        "github-push": "npm run build && npm version patch && git pushall && git pushall-tags",
+        "npm-publish": "npm run build && npm publish --access public"
     },
     "dependencies": {
         "fs-extra": "^10.0.0",
         "glob": "^7.1.7",
+        "ini": "^2.0.0",
         "init-package-json": "^2.0.4",
         "npm-package-arg": "^8.1.5",
         "prompts": "^2.4.1",
@@ -48,6 +50,7 @@
         "@schemastore/package": "^0.0.6",
         "@types/fs-extra": "^9.0.12",
         "@types/glob": "^7.1.4",
+        "@types/ini": "^1.3.30",
         "@types/init-package-json": "^1.10.0",
         "@types/node": "^16.7.10",
         "@types/npm-package-arg": "^6.1.1",
@@ -56,7 +59,17 @@
         "@types/semver": "^7.3.8",
         "@types/validate-npm-package-license": "^3.0.1",
         "@types/validate-npm-package-name": "^3.0.3",
+        "@types/jest": "^27.0.1",
+        "concurrently": "^6.2.1",
+        "jest": "^27.1.0",
+        "jest-environment-node": "^27.1.0",
+        "ts-jest": "^27.0.5",
         "shx": "^0.3.3",
         "typescript": "^4.4.2"
+    },
+    "local": {
+        "dependencies": {
+            "@upradata/node-util": "link:/home/milottit/Libraries/Upra-Data/node-util@14.0.2"
+        }
     }
 }

@@ -19,21 +19,44 @@
         {
             "type": "pwa-node",
             "request": "launch",
-            "name": "npm-init.js",
+            "name": "init.js",
+            "cwd": "${workspaceFolder}/TEST2",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/lib/npm-init.js",
+            "program": "${workspaceFolder}/lib/init.js",
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ],
             "console": "integratedTerminal",
-            "internalConsoleOptions": "openOnSessionStart"
+            "internalConsoleOptions": "openOnSessionStart",
+            "runtimeExecutable": "/home/milottit/.nvm/versions/node/v15.9.0/bin/node"
+        },
+        {
+            "type": "node",
+            "name": "UT Test",
+            "request": "launch",
+            "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+            "outFiles": [
+                "${workspaceFolder}/lib/**/*.js"
+            ],
+            "args": [
+                "--runInBand",
+                "--verbose",
+                "false",
+                "--config",
+                "${workspaceFolder}/jest-ut.config.js"
+            ],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "openOnFirstSessionStart",
+            "disableOptimisticBPs": true,
+            "runtimeExecutable": "/home/milottit/.nvm/versions/node/v15.9.0/bin/node"
         },
         {
             "type": "pwa-node",
             "request": "launch",
-            "name": "npm init",
+            "name": "npm-cli",
             "skipFiles": [
                 "<node_internals>/**"
             ],

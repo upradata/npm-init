@@ -1,0 +1,23 @@
+{
+    "name": "test",
+    "version": "1.0.0",
+    "license": "MIT",
+    "description": "une petite description",
+    "keywords": [
+        "key1",
+        "key2",
+        "key3"
+    ],
+    "author": {
+        "name": "Thomas Milotti",
+        "url": "https://github.com/milottit",
+        "email": "thomas.milotti@gmail.com"
+    },
+    "bin": "bin/index.js",
+    "main": "index.js",
+    "scripts": {
+        "test": "jest --runInBand --passWithNoTests --verbose false --config jest-ut.config.js"
+    },
+    "repository": "https://github.com/upradata/test",
+    "devDependencies": {}
+}

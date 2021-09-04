@@ -4,7 +4,7 @@ import { Readable, Writable } from 'stream';
 import type P from '../node_modules/@types/prompts/index.d';
 import { GetType, Value, ValueOf, TT$ } from './prompts.type';
 
-type PrompFunc2<T1 = any, T2 = any, R = any> = (a1: T1, a2: T2) => R;
+type PromptFunc2<T1 = any, T2 = any, R = any> = (a1: T1, a2: T2) => R;
 
 
 type Prop<O extends PromptObjectBase> = {
@@ -15,7 +15,7 @@ type Prop<O extends PromptObjectBase> = {
 export type Answer<Q extends PromptObjectBase> = Prop<Q>;
 
 
-type PromptObjectBase<N extends string = string, T extends P.PromptType = P.PromptType, F extends PrompFunc2 = PrompFunc2> = {
+type PromptObjectBase<N extends string = string, T extends P.PromptType = P.PromptType, F extends PromptFunc2 = PromptFunc2> = {
     name: TT$<N>;
     type: TT$<T>;
     format?: F;
@@ -55,7 +55,7 @@ type FFS<Q extends Questions, U> = { format: PrompFunc2<Q[ 'type' ], any, U>; };
 
 export type Post<Q extends Question, U> = {
     format?: (value: GetType<Value<ValueOf<Q>[ 'type' ]>> /* , answers: A */) => U;
-    validate?: (value: GetType<Value<ValueOf<Q>[ 'type' ]>>) => boolean;
+    validate?: (value: GetType<Value<ValueOf<Q>[ 'type' ]>>) => boolean | string;
     initial?: ValueOf<Q>[ 'type' ]; // | PrevCaller<Q & U, ValueOf<Q>[ 'type' ]>;
     // | PrevCaller<Q & U, string>;
 

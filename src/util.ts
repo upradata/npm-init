@@ -1,3 +1,4 @@
+import { URL } from 'url';
 import validateName from 'validate-npm-package-name';
 import { ExtendedPerson, PlainPerson } from './pkg-json';
 import { makePrompts } from './prompts';
@@ -15,14 +16,28 @@ export const validatePackageName = (name: string) => {
     const its = validateName(name);
 
     if (its.validForNewPackages)
-        return { name };
+        return { name, isValid: true };
 
-    const errors = (its.errors || []).concat(its.warnings || []);
+    const errors = (its.errors || []); // .concat(its.warnings || []);
     const error = new Error(`Sorry, ${errors.join(' and ')}.`);
 
-    return { error };
+    return { error, isValid: false };
 };
 
+
+export const validateUrl = (value: string, protocols?: string[]) => {
+    try {
+        const url = new URL(value);
+
+        if (protocols)
+            return url.protocol ? protocols.map(x => `${x.toLowerCase()}:`).includes(url.protocol) : false;
+
+        return true;
+
+    } catch (err) {
+        return false;
+    }
+};
 
 
 // flatten => "Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)"

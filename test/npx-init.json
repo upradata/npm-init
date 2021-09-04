@@ -1,0 +1,14 @@
+{
+    "npm": {
+        "file": "../lib/init-config/npm.init.js",
+        "title": "npm"
+    },
+    "upradata": {
+        "file": "../lib/init-config/upradata.init.js",
+        "title": "upradata"
+    },
+    "example": {
+        "file": "../package.example.json",
+        "title": "example"
+    }
+}

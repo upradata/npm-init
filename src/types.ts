@@ -33,8 +33,8 @@ export type PromptTransform<T = any> = (data: string) => T | Error & { notValid?
 export interface InitContext {
     package: PackageJson;
     yes: boolean;
+    filename: string;
     dirname: string;
-    // filename: string;
     basename: string;
     config: { get: (k: string) => any; toJSON: () => Record<string, any>; };
     // prompt: <U = any, T = any>(question: string, defaultValue?: U, transform?: PromptTransform<T>) => string;

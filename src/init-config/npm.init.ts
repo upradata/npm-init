@@ -3,10 +3,10 @@ import path from 'path';
 import validateLicense from 'validate-npm-package-license';
 import npa from 'npm-package-arg';
 import semver from 'semver';
-import { flattenPerson, niceName, pkgPrompts, unflattenPerson, validatePackageName } from './util';
-import { InitContext, PkgJson, PkgJsonKeys } from './types';
-import prompts from './prompts';
-import { JSONSchemaForNPMPackageJsonFiles } from './pkg-json';
+import { flattenPerson, niceName, pkgPrompts, unflattenPerson, validatePackageName } from '../util';
+import { InitContext, PkgJson, PkgJsonKeys } from '../types';
+import prompts from '../prompts';
+import { JSONSchemaForNPMPackageJsonFiles } from '../pkg-json';
 
 
 const isTestPkg = (p: string) => {
@@ -19,7 +19,7 @@ export default async (ctx: InitContext): Promise<PkgJson> => {
     const packageProp = <P extends PkgJsonKeys>(prop: P): PkgJson[ P ] => ctx.package[ prop ];
 
     const readDeps = async (test: boolean, excluded: Record<string, string>): Promise<Record<string, string>> => {
-        const packages = await fs.readdir('node_modules');
+        const packages = await fs.readdir('node_modules').catch(_e => [] as string[]);
 
         const deps = await Promise.all(packages.map(async pkg => {
             if (!path.isAbsolute(pkg))
@@ -29,7 +29,10 @@ export default async (ctx: InitContext): Promise<PkgJson> => {
                 return;
 
             const pkgJsonFile = path.join(ctx.dirname, 'node_modules', pkg, 'package.json');
-            const json: JSONSchemaForNPMPackageJsonFiles & { _requiredBy?: string[]; } = await fs.readJson(pkgJsonFile, { encoding: 'utf8' });
+
+            const json: JSONSchemaForNPMPackageJsonFiles & { _requiredBy?: string[]; } = await fs.readJson(
+                pkgJsonFile, { encoding: 'utf8' }
+            ).catch(_e => ({}));
 
             if (!json.version) {
                 console.warn(`Not adding package ${pkg} in package.json: "version field absent in ${pkg}/package.json"`);
@@ -45,12 +48,13 @@ export default async (ctx: InitContext): Promise<PkgJson> => {
             };
         }));
 
-        return deps.reduce((o, { pkg, version }) => { o[ pkg ] = version; return o; }, {});
+
+        return deps.filter(v => !!v).reduce((o, { pkg, version }) => ({ ...o, [ pkg ]: version }), {});
     };
 
 
 
-    const pkgName = niceName(ctx.package.name || ctx.basename);
+    const pkgName = niceName(ctx.package.name || ctx.dirname);
 
 
     const getSpec = () => {
@@ -66,7 +70,7 @@ export default async (ctx: InitContext): Promise<PkgJson> => {
     const getScope = () => {
         const scope = ctx.config.get('scope') || spec.scope;
 
-        if (scope?.charAt(0) !== '@')
+        if (scope && scope.charAt(0) !== '@')
             return `@${scope}`;
     };
 
@@ -85,7 +89,7 @@ export default async (ctx: InitContext): Promise<PkgJson> => {
 
 
     const getTestCommand = async (): Promise<string> => {
-        const { test } = ctx.package.scripts;
+        const { test } = ctx.package.scripts || {};
 
         if (test)
             return test;
@@ -110,15 +114,16 @@ export default async (ctx: InitContext): Promise<PkgJson> => {
         type: 'text',
         name: 'name',
         message: 'project name',
-        initial: packgeName,
-        validate: value => validatePackageName(value).error?.message || true,
+        initial: packgeName
+    }, {
+        validate: value => validatePackageName(value).error?.message || true
     });
 
 
 
     const directories = ctx.yes ? packageProp('directories') : await (async () => {
 
-        const files = await fs.readdir(ctx.dirname);
+        const files: string[] = await fs.readdir(ctx.basename).catch(_e => []);
 
         const dirs = files.reduce((o, d) => {
             switch (d) {
@@ -145,14 +150,13 @@ export default async (ctx: InitContext): Promise<PkgJson> => {
 
     const defaultTest = await getTestCommand();
 
-    const scriptTest = ctx.yes ? { test: defaultTest } : await prompts({
+    const scriptsTest = ctx.yes ? { test: defaultTest } : await prompts({
         type: 'text',
         name: 'test',
         message: 'script test',
         initial: defaultTest,
     });
 
-    const scripts = { test: scriptTest.test };
 
     const { keywords } = ctx.yes ? { keywords: packageProp('keywords') } : await pkgPrompts({
         type: 'list',
@@ -226,14 +230,14 @@ export default async (ctx: InitContext): Promise<PkgJson> => {
         type: 'text',
         name: 'repository',
         message: 'git repository',
-        initial: getRepository()
+        initial: await getRepository()
     });
 
 
     const configLicense = ctx.package.license ||
         ctx.config.get('init.license') ||
         ctx.config.get('init-license') ||
-        ctx.config.get('defaults')[ 'init.license' ] ||
+        ctx.config.get('defaults')?.[ 'init.license' ] ||
         'ISC';
 
 
@@ -241,8 +245,9 @@ export default async (ctx: InitContext): Promise<PkgJson> => {
         type: 'text',
         name: 'license',
         message: 'license',
-        initial: configLicense,
-        validate: (value: string) => {
+        initial: configLicense
+    }, {
+        validate: value => {
             const v = validateLicense(value);
             return v.validForNewPackages || v.warnings.join('');
         }
@@ -267,7 +272,7 @@ export default async (ctx: InitContext): Promise<PkgJson> => {
 
     const configVersion = ctx.package.version ||
         ctx.config.get('init.version') ||
-        ctx.config?.get('defaults')[ 'init.version' ] ||
+        ctx.config?.get('defaults')?.[ 'init.version' ] ||
         '1.0.0';
 
     const { version } = ctx.yes ? { version: configVersion } : await pkgPrompts({
@@ -277,7 +282,6 @@ export default async (ctx: InitContext): Promise<PkgJson> => {
         initial: configVersion,
         format: semver.valid
     });
-
 
 
 
@@ -310,9 +314,7 @@ export default async (ctx: InitContext): Promise<PkgJson> => {
     });
 
 
-
-
-    return {
+    const config = {
         name,
         version,
         license,
@@ -321,10 +323,17 @@ export default async (ctx: InitContext): Promise<PkgJson> => {
         author,
         bin,
         main,
-        scripts,
+        scripts: {
+            ...scriptsTest
+        },
         repository,
         directories,
         dependencies,
         devDependencies
     };
+
+
+    return Object.entries(config).reduce((pkgJson, [ k, v ]) => {
+        return { ...pkgJson, ...(v ? { [ k ]: v } : {}) };
+    }, {});
 };
