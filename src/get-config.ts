@@ -1,6 +1,6 @@
 import prompts from 'prompts';
 import path from 'path';
-import { findUp } from '@upradata/node-util';
+import { findUp, red, styles as s } from '@upradata/node-util';
 import { InitContext, PkgJson } from './types';
 
 type NpxInit = Record<string, { title: string; file: string; }>;
@@ -10,7 +10,17 @@ export const getUserPkgJson = async (ctx: InitContext): Promise<PkgJson> => {
 
     const npxConfigPath = false ||
         await findUp(configFiles, { type: 'file', from: process.cwd() }) ||
-        await findUp('npx-init.json', { type: 'file', from: __dirname });
+        await findUp('npx-init.json', { type: 'file', from: __dirname }) ||
+        await findUp(configFiles, { type: 'file', from: path.join(process.env.XDG_CONFIG_HOME || path.join(process.env.HOME, '.config'), 'npx-init') });
+
+    if (!npxConfigPath) {
+        console.error(red`\n⛔ Could not find a npx-init config file ⛔`);
+        console.error(s.yellow.args.oneLine.stripIndent.full.$`
+            👀 Config files can be ${'"npx-init.{js,json}"'} or ${'".npx-init.{js,json}"'} in the ${'current'} directory or in ${'~/.config/npx-init'}
+        `);
+
+        return {};
+    }
 
 
     const npxInit: NpxInit = (await import(npxConfigPath)).default;

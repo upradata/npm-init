@@ -87,7 +87,7 @@ export type InitOpts<M extends InitMode> = Partial<InitOptions<M>>;
 
 export const init = async <M extends InitMode = 'write'>(
     options: InitOpts<M> = {}
-): Promise<PkgJsonGenerated<M extends 'write' ? PkgJson : void>> => {
+): Promise<PkgJsonGenerated<M extends 'write' ? void : PkgJson>> => {
 
     try {
         const { mode = 'write' } = options;
@@ -130,9 +130,10 @@ export const init = async <M extends InitMode = 'write'>(
 export const writePkgJson = async ({ path, data, isNew }: PkgJsonGenerated<string>) => {
     await fs.writeFile(path, data, 'utf8');
 
-    console.log(s.green.oneLine.$`
-    \n😃 "package.json" ${bold`has been generated!`}
-    ${isNew ? '' : yellow` (Only the value prompted have been added or modified)`}`
+    console.log();
+    console.log(s.stripIndent.oneLine.stripIndent.green.$`
+        😃 "package.json" ${bold`has been generated!`}
+        ${isNew ? '' : yellow` (Only the value prompted have been added or modified)`}`
     );
 
     console.log(s.white.bold.magentaBG.$`\nLet's get work now 💻`);
